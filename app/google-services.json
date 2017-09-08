@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "612270151981",
+    "firebase_url": "https://petrichor-31c97.firebaseio.com",
+    "project_id": "petrichor-31c97",
+    "storage_bucket": "petrichor-31c97.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:612270151981:android:94b25d5bb9fa2c5d",
+        "android_client_info": {
+          "package_name": "com.himanshu.petrichor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "612270151981-94otlssl1vmnojd3lcoa9c7ojp2buav0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.himanshu.petrichor",
+            "certificate_hash": "889e8c36d17a0303cf1dc6e9ca70d4966b58aced"
+          }
+        },
+        {
+          "client_id": "612270151981-bq91ct3d5pp6jkpovebg2nq2p639if8t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAyjO7iustbDnTb3cECL4EhKnl1tb_ebI0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "612270151981-bq91ct3d5pp6jkpovebg2nq2p639if8t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
