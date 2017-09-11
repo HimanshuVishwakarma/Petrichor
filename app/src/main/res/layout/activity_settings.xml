@@ -14,31 +14,31 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="40dp"
         android:src="@mipmap/default_avatar"
-        android:id="@+id/circleImageView" />
+        android:id="@+id/setting_circleImageView" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/setting_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/circleImageView"
+        android:layout_below="@+id/setting_circleImageView"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="37dp"
-        android:text="Display Name"
+        android:text="@string/default_name"
         android:textColor="@android:color/white"
         android:textSize="23sp"
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/setting_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/setting_name"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="24dp"
         android:maxLines="4"
-        android:text="Hi there, I'm using Petrichor"
+        android:text="@string/default_status"
         android:textColor="@android:color/white"
-        android:textSize="17sp"
-        android:layout_below="@+id/textView2"
-        android:layout_centerHorizontal="true" />
+        android:textSize="17sp" />
 
     <Button
         android:id="@+id/settings_changeimage"
