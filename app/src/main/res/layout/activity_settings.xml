@@ -8,13 +8,13 @@
     tools:context="com.himanshu.petrichor.SettingsActivity">
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:layout_width="170dp"
-        android:layout_height="170dp"
+        android:id="@+id/setting_circleImageView"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="40dp"
-        android:src="@mipmap/default_avatar"
-        android:id="@+id/setting_circleImageView" />
+        android:src="@mipmap/default_avatar" />
 
     <TextView
         android:id="@+id/setting_name"
@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/setting_circleImageView"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="37dp"
+        android:layout_marginTop="30dp"
         android:text="@string/default_name"
         android:textColor="@android:color/white"
         android:textSize="23sp"
@@ -34,7 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/setting_name"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="22dp"
         android:maxLines="4"
         android:text="@string/default_status"
         android:textColor="@android:color/white"
