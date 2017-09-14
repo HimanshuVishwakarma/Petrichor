@@ -11,4 +11,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="default_name">Display Name</string>
     <string name="default_status">Hi there, I\'m using Petrichor</string>
+    <string name="total_friends">Total Friends</string>
+    <string name="send_friend_request">SEND FRIEND REQUEST</string>
+    <string name="decline_friend_request">Decline friend request</string>
 </resources>

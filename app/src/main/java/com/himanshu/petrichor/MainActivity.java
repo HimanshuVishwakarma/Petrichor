@@ -94,6 +94,11 @@ public class MainActivity extends AppCompatActivity {
             startActivity(settingIntent);
         }
 
+        if (item.getItemId() == R.id.main_menu_allusers) {
+            Intent settingIntent = new Intent(MainActivity.this, UsersActivity.class);
+            startActivity(settingIntent);
+        }
+
         return true;
     }
 }
