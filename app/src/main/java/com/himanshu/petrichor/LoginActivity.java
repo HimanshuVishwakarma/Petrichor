@@ -21,6 +21,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import static com.himanshu.petrichor.R.string.display_name;
 
@@ -31,6 +34,8 @@ public class LoginActivity extends AppCompatActivity {
     private TextInputLayout mPassword;
     private Button mLogin;
     private ProgressDialog mProgressDialog;
+
+    private DatabaseReference mUserDatabse;
 
     private FirebaseAuth mAuth;
 
@@ -47,24 +52,23 @@ public class LoginActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mAuth = FirebaseAuth.getInstance();
+        mUserDatabse = FirebaseDatabase.getInstance().getReference().child("Users");
 
         mEmail = (TextInputLayout) findViewById(R.id.login_email);
         mPassword = (TextInputLayout) findViewById(R.id.login_password);
         mLogin = (Button) findViewById(R.id.login_button);
-        
+
         mLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String email = mEmail.getEditText().getText().toString();
                 String password = mPassword.getEditText().getText().toString();
 
-                if(!isNetworkAvailable()){
+                if (!isNetworkAvailable()) {
                     Toast.makeText(LoginActivity.this, "Check Network Connectivity", Toast.LENGTH_SHORT).show();
-                }
-                else if(TextUtils.isEmpty(email) || TextUtils.isEmpty(password)){
+                } else if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
                     Toast.makeText(LoginActivity.this, "Please Fill All Details", Toast.LENGTH_SHORT).show();
-                }
-                else{
+                } else {
                     mProgressDialog.setTitle("Logging In");
                     mProgressDialog.setMessage("Please wait while we check your credentials.");
                     mProgressDialog.setCanceledOnTouchOutside(false);
@@ -99,11 +103,22 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             mProgressDialog.dismiss();
-                            sendToMainPage();
+                            String deviceToken = FirebaseInstanceId.getInstance().getToken();
+                            String current_user_id = mAuth.getCurrentUser().getUid();
+
+                            mUserDatabse.child(current_user_id).child("device_token").setValue(deviceToken).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        sendToMainPage();
+                                    }
+                                }
+                            });
+
                         } else {
                             // If sign in fails, display a message to the user.
                             mProgressDialog.hide();
-                            Toast.makeText(LoginActivity.this , task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                            Toast.makeText(LoginActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
                         }
 
                         // ...

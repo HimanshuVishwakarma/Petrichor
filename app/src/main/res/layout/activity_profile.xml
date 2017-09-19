@@ -44,7 +44,7 @@
         android:id="@+id/profile_sendRequest_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/button3"
+        android:layout_above="@+id/profile_decline_frd_req"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="8dp"
         android:backgroundTint="@color/colorAccent"
@@ -64,7 +64,7 @@
         android:textColor="@android:color/black" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/profile_decline_frd_req"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
