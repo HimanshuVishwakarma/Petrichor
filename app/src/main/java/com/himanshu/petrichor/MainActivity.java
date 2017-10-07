@@ -12,6 +12,9 @@ import android.view.MenuItem;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -19,6 +22,8 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener mAuthListener;
     private Toolbar mToolbar;
     private SectionsPagerAdapter mSectionPagerAdapter;
+
+    private DatabaseReference mUserRef;
 
     private ViewPager mViewPager;
     private TabLayout tabLayout;
@@ -28,9 +33,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mAuth = FirebaseAuth.getInstance();
+
         mToolbar = (Toolbar) findViewById(R.id.main_page_toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("Petrichor");
+
+        //  mAuth = FirebaseAuth.getInstance();
+        //String id = mAuth.getCurrentUser().getUid();
+        //if(mAuth.getCurrentUser().getUid() != null)
+        //   mUserRef = FirebaseDatabase.getInstance().getReference().child("Users").child(id);
 
         //Tabs
         mViewPager = (ViewPager) findViewById(R.id.main_tabPager);
@@ -39,8 +51,6 @@ public class MainActivity extends AppCompatActivity {
         tabLayout = (TabLayout) findViewById(R.id.main_tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-        mAuth = FirebaseAuth.getInstance();
-
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -48,6 +58,11 @@ public class MainActivity extends AppCompatActivity {
                 if (user == null) {
                     // User is signed out
                     sendToStart();
+                } else {
+                    String id = mAuth.getCurrentUser().getUid();
+                    //if(mAuth.getCurrentUser().getUid() != null)
+                    mUserRef = FirebaseDatabase.getInstance().getReference().child("Users").child(id);
+                    mUserRef.child("online").setValue("true");
                 }
             }
         };
@@ -68,6 +83,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onStop() {
         super.onStop();
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user != null) {
+            mUserRef.child("online").setValue(ServerValue.TIMESTAMP);
+            //mUserRef.child("LastSeen").setValue(ServerValue.TIMESTAMP);
+        }
         if (mAuthListener != null) {
             mAuth.removeAuthStateListener(mAuthListener);
         }

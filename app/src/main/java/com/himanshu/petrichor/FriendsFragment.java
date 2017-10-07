@@ -2,13 +2,17 @@ package com.himanshu.petrichor;
 
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -49,13 +53,14 @@ public class FriendsFragment extends Fragment {
 
         mMainView = inflater.inflate(R.layout.fragment_friends, container, false);
 
-        mFriendsList = (RecyclerView) mMainView.findViewById(R.id.friends_list);
+        mFriendsList = mMainView.findViewById(R.id.friends_list);
         mAuth = FirebaseAuth.getInstance();
 
         mCurrent_user_id = mAuth.getCurrentUser().getUid();
 
         mFriendDatabase = FirebaseDatabase.getInstance().getReference().child("Friends").child(mCurrent_user_id);
         mFriendDatabase.keepSynced(true);
+
         mUsersDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
         mUsersDatabase.keepSynced(true);
 
@@ -64,12 +69,11 @@ public class FriendsFragment extends Fragment {
 
         return mMainView;
     }
-
     @Override
     public void onStart() {
         super.onStart();
 
-        final FirebaseRecyclerAdapter<Friends, FriendsViewHolder> friendsRecyclerViewAdapter = new FirebaseRecyclerAdapter<Friends, FriendsViewHolder>(
+        FirebaseRecyclerAdapter<Friends, FriendsViewHolder> friendsRecyclerViewAdapter = new FirebaseRecyclerAdapter<Friends, FriendsViewHolder>(
 
                 Friends.class,
                 R.layout.users_single_layout,
@@ -80,19 +84,54 @@ public class FriendsFragment extends Fragment {
             protected void populateViewHolder(final FriendsViewHolder viewHolder, Friends model, int position) {
                 // viewHolder.setDate(model.getDate());                 THIS WAS WHEN WE WANT TO SET DATE IN STATUS TEXTVIEW
 
-                String list_user_id = getRef(position).getKey();
+                final String list_user_id = getRef(position).getKey();
 
                 mUsersDatabase.child(list_user_id).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        String userName = dataSnapshot.child("name").getValue().toString();
+                        final String userName = dataSnapshot.child("name").getValue().toString();
                         String userStatus = dataSnapshot.child("status").getValue().toString();
-                        String userThumbImage = dataSnapshot.child("thunb_image").getValue().toString();
+                        String userThumbImage = dataSnapshot.child("thumb_image").getValue().toString();
+
+                        if (dataSnapshot.hasChild("online")) {
+                            String userOnline = (String) dataSnapshot.child("online").getValue().toString();
+                            viewHolder.setUserOnline(userOnline);
+                        }
 
                         viewHolder.setName(userName);
                         viewHolder.setStatus(userStatus);
                         viewHolder.setUserImage(userThumbImage, getContext());
+                        viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
 
+                                CharSequence options[] = new CharSequence[]
+                                        {"Open Profile", "Send Message"};
+
+                                final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+                                builder.setTitle("Select Options");
+                                builder.setItems(options, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        //CLICK EVENT
+                                        if (i == 0) {
+                                            Intent profileintent = new Intent(getContext(), ProfileActivity.class);
+                                            profileintent.putExtra("user_id", list_user_id);
+                                            startActivity(profileintent);
+                                        }
+                                        if (i == 1) {
+                                            Intent chatintent = new Intent(getContext(), ChatActivity.class);
+                                            chatintent.putExtra("user_id", list_user_id);
+                                            chatintent.putExtra("user_name", userName);
+                                            startActivity(chatintent);
+                                        }
+                                    }
+                                });
+                                builder.show();
+
+                            }
+                        });
                     }
 
                     @Override
@@ -102,6 +141,7 @@ public class FriendsFragment extends Fragment {
                 });
             }
         };
+        mFriendsList.setAdapter(friendsRecyclerViewAdapter);
     }
 
     public static class FriendsViewHolder extends RecyclerView.ViewHolder {
@@ -128,7 +168,15 @@ public class FriendsFragment extends Fragment {
             Picasso.with(ctx).load(thumb_image).placeholder(R.mipmap.default_avatar).into(thumb);
         }
 
-    }
+        public void setUserOnline(String online_status) {
+            ImageView userOnlineView = (ImageView) mView.findViewById(R.id.user_single_online_icon);
+            if (online_status.equals("true")) {
+                userOnlineView.setVisibility(View.VISIBLE);
+            } else {
+                userOnlineView.setVisibility(View.INVISIBLE);
+            }
+        }
 
+    }
 
 }
