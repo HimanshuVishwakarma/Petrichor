@@ -18,6 +18,8 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static com.himanshu.petrichor.R.drawable.message_text_background;
+
 /**
  * Created by Himanshu on 10/7/2017.
  */
@@ -46,7 +48,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
     public class MessageViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView messageText;
+        public TextView messageText, senderText;
         public CircleImageView profileImage;
         public TextView displayName;
 
@@ -54,8 +56,9 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
             super(view);
 
             messageText = (TextView) view.findViewById(R.id.message_text_layout);
-            profileImage = (CircleImageView) view.findViewById(R.id.message_profile_layout);
-            displayName = (TextView) view.findViewById(R.id.name_text_layout);
+            senderText = (TextView) view.findViewById(R.id.message_text_layout_right);
+            // profileImage = (CircleImageView) view.findViewById(R.id.message_profile_layout);
+            //displayName = (TextView) view.findViewById(R.id.name_text_layout);
 
         }
     }
@@ -63,19 +66,25 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
     @Override
     public void onBindViewHolder(final MessageViewHolder viewHolder, int i) {
 
-        String current_user_id = mAuth.getCurrentUser().getUid();
+        String current_user_id = "";
+        mAuth = FirebaseAuth.getInstance();
+        if (mAuth.getCurrentUser() != null)
+            current_user_id = mAuth.getCurrentUser().getUid();
 
         Messages c = mMessageList.get(i);
 
         String from_user = c.getFrom();
 
         if (from_user.equals(current_user_id)) {
+            viewHolder.senderText.setBackgroundResource(R.drawable.message_text_background);
+            viewHolder.senderText.setText(c.getMessage());
 
         } else {
-
+            viewHolder.messageText.setBackgroundResource(R.drawable.message_text_background_2);
+            viewHolder.messageText.setText(c.getMessage());
         }
 
-        mUserDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(from_user);
+        /*mUserDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(from_user);
 
         mUserDatabase.addValueEventListener(new ValueEventListener() {
             @Override
@@ -96,8 +105,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
             }
         });
+*/
 
-        viewHolder.messageText.setText(c.getMessage());
 
     }
 
