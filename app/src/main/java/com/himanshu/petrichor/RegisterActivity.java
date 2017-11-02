@@ -32,6 +32,8 @@ public class RegisterActivity extends AppCompatActivity {
     private TextInputLayout mEmail;
     private TextInputLayout mPassword;
     private Button create_account;
+
+
     private Toolbar mcreateToolbar;
     private DatabaseReference mdatabase;
 

@@ -14,4 +14,5 @@
     <string name="total_friends">Total Friends</string>
     <string name="send_friend_request">SEND FRIEND REQUEST</string>
     <string name="decline_friend_request">Decline friend request</string>
+    <string name="enter_message">Enter Message...</string>
 </resources>
